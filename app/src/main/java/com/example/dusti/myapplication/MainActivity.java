@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     PendingIntent pending_intent;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -2,10 +2,12 @@ package com.example.dusti.myapplication;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,16 +37,12 @@ public class RingtonePlayingService extends Service {
         String state = intent.getExtras().getString("extra");
 
 
-        //NOTIFICATION
 
-        //set up the notification manager
-        NotificationManager notify_manager = (NotificationManager);
-        getSystemService(NOTIFICATION_SERVICE);
-        //set up an intent that goes to the main activity
-        Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
 
-        // set up notifcation popup
-     Notification notification_manager
+
+
+
+
 
         //this converts the extra strings from the intent to start IDS, values 0 or 1
 
@@ -69,6 +67,31 @@ public class RingtonePlayingService extends Service {
             media_song.start();
             this.isRunning = true;
             this.startId = 0;
+
+            //NOTIFICATION
+
+            //set up the notification manager
+            NotificationManager notify_manager = (NotificationManager)
+                    this.getSystemService(this.NOTIFICATION_SERVICE);
+
+            //set up an intent that goes to the main activity
+            Intent intent_main_activity = new Intent(this.getApplicationContext(), MainActivity.class);
+
+            //set up a pending intent
+            PendingIntent pending_intent_main_activity = PendingIntent.getActivity(this, 0 , intent_main_activity, 0);
+
+
+            //make the notification parameters
+
+            Notification notification_popup = new Builder(this)
+                    .setContentTitle("Your alarm is going off!!")
+                    .setContentText("Click me!")
+                    .setContentIntent(pending_intent_main_activity)
+                    .setAutoCancel(true)
+                    .build();
+
+            //set up the notification call command
+            notify_manager.notify(0, notification_popup);
 
         }
         // if there is music playing and the user pressed alarm off
